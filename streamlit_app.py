@@ -4,6 +4,8 @@ from constants import claim_prompt, counter_narrative_prompt
 # langchain 
 from langchain_community.document_loaders import YoutubeLoader
 import pandas as pd
+from datetime import datetime
+
 
 # Sample data for CSV
 data = {
@@ -87,11 +89,9 @@ def generate_offensive_messaging(input_tex, language):
 
 st.title("AAPI Countering Disinformation")
 
-st.title("Top polarizing content for candidate")
-query = st.text_input("Refine:", value='filter polarizing content')
-language = st.selectbox("Select language:", [('Hindi', 'hi'), ('Mandarin', 'zh-CN'), ('Cantonese', 'zh-TW')], index=0)
-
-
+query = st.text_input("Refine:", value='Filter Polarizing Content')
+language = st.selectbox("Select language:", [('Select a lanaguage'), ('Hindi', 'hi'), ('Mandarin', 'zh-CN'), ('Cantonese', 'zh-TW')], index=0)
+st.subheader("Top polarizing content for candidate")
 results = fetch_high_polarity_video()
 if results:
     cols = st.columns(3)  # Create 3 columns
@@ -104,8 +104,10 @@ if results:
                 st.image(f"https://img.youtube.com/vi/{video_stat.get('video').get('id')}/0.jpg", use_column_width=True)
                 st.subheader(video['title'])
                 st.write(f"Channel: {video['channel_title']}")
-                st.write(f"Published: {video['published_at']}")
-                
+                published_at = video['published_at']
+                formatted_date = datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d")
+
+                st.write(f"Published: {formatted_date}")                
                 if stats:
                     st.write(f"Views: {stats.get('viewCount', 'N/A')}")
                     st.write(f"Likes: {stats.get('likeCount', 'N/A')}")
