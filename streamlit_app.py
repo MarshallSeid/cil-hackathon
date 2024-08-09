@@ -47,16 +47,18 @@ transcript = ''
 
 if st.button('load transcript'): 
     try: 
-        loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False)
+        loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False,language=["en", "id","hi"],translation="en")
         transcript = loader.load()
         transcript = transcript[0]
         st.write(transcript.page_content)
     except Exception as e:
         transcript = 'test transcript'
+        st.write('Error loading transcript')
 
 if transcript:
     # Generate claims
     claims = generate_claims(transcript)
+    claims = ''
     if claims:
         st.text_area("Generated claims from the input", claims, height=100)
 
