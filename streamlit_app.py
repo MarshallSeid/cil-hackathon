@@ -109,19 +109,20 @@ if transcript:
 
     if yes_no == "Yes":
         language = st.selectbox(
-            "Select output language",
-            ["English", "Hindi", "Spanish", "Mandarin", "French", "Arabic"]
+            "Select output language (English generated automatically)",
+            ["Hindi", "Spanish", "Mandarin", "French", "Arabic"]
         )
 
         # HTML for the button
         if st.markdown('<button class="blue-button">Generate counter narrative Messaging</button>', unsafe_allow_html=True):
             offensive_msg = generate_offensive_messaging(transcript, language)
-            st.text_area(f"Generated positive/counter narrative messaging in {language}", offensive_msg, height=100)
-    
-    # Generate offensive messaging sections
-    for i in range(3):
-        offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
-        st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=500)
+            for i in range(3):
+                    offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
+                    st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=500)    
+    # # Generate offensive messaging sections
+    # for i in range(3):
+    #     offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
+    #     st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=500)
 else:
     st.warning("Please enter a video link.")
 
