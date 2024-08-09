@@ -61,7 +61,7 @@ st.title("AAPI Countering Disinformation")
 input_text = st.text_input("Input - ex: Youtube Link")
 transcript = ''
 
-if st.button('load transcript'): 
+if st.button('Load Transcript'): 
     try: 
         loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False,language=["en", "id","hi"],translation="en")
         transcript = loader.load()
@@ -71,36 +71,28 @@ if st.button('load transcript'):
         transcript = 'test transcript'
         st.write('Error loading transcript')
 
-if transcript:
     # Generate claims
     claims = generate_claims(transcript)
     if claims:
         st.text_area("Generated claims from the input", claims, height=100)
 
-    # Yes/No input and button
-    yes_no = st.radio("Yes/No", ["Yes", "No"])
-    
-    if yes_no == "Yes":
-        col1, col2 = st.columns([2, 1])
-        with col1:
-            language = st.selectbox(
-                "Select output language",
-                ["English", "Hindi", "Spanish", "Mandarin", "French", "Arabic"]
-            )
-        with col2:
-            if st.button("Generate Offensive Messaging"):
-                offensive_msg = generate_offensive_messaging(transcript, language)
-                st.text_area(f"Generated offensive messaging in {language}", offensive_msg, height=100)
-    
-    # Language Output
-    st.text_input("Language Output", "Sample output based on Yes/No")
+# Yes/No input and button
+yes_no = st.selectbox("Does this contain mis/disinformation?", ["No", "Yes"])
 
+if yes_no == "Yes":
+    language = st.selectbox(
+        "Select output language",
+        ["English", "Hindi", "Spanish", "Mandarin", "French", "Arabic"]
+    )
+    
+    if st.button("Generate Offensive Messaging"):
+        offensive_msg = generate_offensive_messaging(transcript, language)
+        st.text_area(f"Generated counter/offensive messaging in {language}", offensive_msg, height=100)
     # Generate offensive messaging sections
     for i in range(3):
         offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
         st.text_area(f"Generated offensive messaging from the input ({i+1})", offensive_msg, height=50)
-else:
-    st.warning("Please enter a video link.")
+
 
 # Share button
 if st.button("Share"):
