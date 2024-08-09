@@ -22,6 +22,7 @@ def search_videos(query, language, max_results=20, published_after=datetime.date
         ).execute()
 
         videos = []
+        import pdb; pdb.set_trace()
         for search_result in search_response.get('items', []):
             video = {
                 'id': search_result['id']['videoId'],
@@ -58,7 +59,7 @@ def fetch_high_polarity_video(query_strings = ['कमला हैरिस क
     for query in query_strings:
         print(f"Searching for top trending videos about '{query}' in Hindi...")
         videos = search_videos(query, language)
-
+        results[query] = []
         for i, video in enumerate(videos, 1):
             print(f"\n{i}. {video['title']}")
             print(f"Channel: {video['channel_title']}")
@@ -72,5 +73,5 @@ def fetch_high_polarity_video(query_strings = ['कमला हैरिस क
                 print(f"Comments: {stats.get('commentCount', 'N/A')}")
             
             print(f"Video URL: https://www.youtube.com/watch?v={video['id']}")
-        results[query] = videos
+            results[query].append({"video": video, "stats": stats})
     return results

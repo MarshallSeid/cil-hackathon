@@ -3,6 +3,7 @@ from openai import OpenAI
 from constants import claim_prompt, counter_narrative_prompt
 # langchain 
 from langchain_community.document_loaders import YoutubeLoader
+from youtube_content_engine import search_videos, fetch_high_polarity_video
 
 # Initialize OpenAI client
 client = None
@@ -56,6 +57,34 @@ def generate_offensive_messaging(input_tex, language):
         return None
 
 st.title("AAPI Countering Disinformation")
+
+st.title("Top polarizing content for candidate")
+query = st.text_input("Refine:", value='filter polarizing content')
+language = st.selectbox("Select language:", [('Hindi', 'hi'), ('Mandarin', 'zh-CN'), ('Cantonese', 'zh-TW')], index=0)
+
+results = fetch_high_polarity_video()
+if results:
+    cols = st.columns(3)  # Create 3 columns
+    index = 0
+    for query, video_stats in results.items():
+        for video_stat in video_stats:
+            video = video_stat.get('video')
+            stats = video_stat.get('stats')
+            with cols[index % 3]:  # This will distribute videos across the 3 columns
+                st.image(f"https://img.youtube.com/vi/{video_stat.get('video').get('id')}/0.jpg", use_column_width=True)
+                st.subheader(video['title'])
+                st.write(f"Channel: {video['channel_title']}")
+                st.write(f"Published: {video['published_at']}")
+                
+                if stats:
+                    st.write(f"Views: {stats.get('viewCount', 'N/A')}")
+                    st.write(f"Likes: {stats.get('likeCount', 'N/A')}")
+                
+                st.markdown(f"https://www.youtube.com/watch?v={video['id']}")
+                st.write("---")
+                index += 1
+else:
+    st.warning("No videos found matching the criteria.")
 
 # Input field and button
 input_text = st.text_input("Input - ex: Youtube Link")
