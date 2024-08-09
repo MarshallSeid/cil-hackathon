@@ -1,6 +1,9 @@
 import streamlit as st
 # from openai import OpenAI
 
+# langchain 
+from langchain_community.document_loaders import YoutubeLoader
+
 # Initialize OpenAI client
 client = None
 
@@ -43,6 +46,13 @@ if api_key:
 
 # Input field and button
 input_text = st.text_input("Input - ex: Youtube Link")
+transcipt = ''
+
+if st.button('load transcipt'): 
+    loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False)
+    transcipt = loader.load()
+    transcipt = transcipt[0]
+    st.write(transcipt.page_content)
 
 if st.button("ent", key="input_ent"):
     if input_text:
