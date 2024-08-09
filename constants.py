@@ -1,5 +1,5 @@
 claim_prompt='''
-Claim extraction: Identify and list all claims being made in [Hindi]. These claims may be:
+Claim extraction: Identify and list all claims being made. These claims may be:
 Explicit Statements: Direct assertions or facts presented as truth (e.g., 'The vaccine contains harmful chemicals').
 Implied Messages: Suggestions or insinuations that are not directly stated but can be inferred from the context or tone (e.g., 'Experts can't be trusted' implied through questioning scientific consensus).
 Emotional Appeals: Claims designed to provoke fear, anger, or other strong emotions (e.g., 'They are coming to take your rights away').
@@ -35,7 +35,7 @@ National security
 
 
 counter_narrative_prompt='''Counter-narratives:
-Based on the claims identified in the provided text, create a menu of highly effective and strategic counter-messages in [Hindi]. These counter-messages should be culturally nuanced and take into account the specific sub-groups within the AAPI community or other relevant demographics that the claims might aim to divide, distort, or evoke heightened emotional responses.
+Based on the claims identified in the provided text, create a menu of highly effective and strategic counter-messages in both Hindi and English side by side. These counter-messages should be culturally nuanced and take into account the specific sub-groups within the AAPI community or other relevant demographics that the claims might aim to divide, distort, or evoke heightened emotional responses.
 
 Include the following considerations in the counter-messaging:
 
