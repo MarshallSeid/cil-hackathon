@@ -66,9 +66,10 @@ if st.button('Load Transcript'):
         loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False,language=["en", "id","hi"],translation="en")
         transcript = loader.load()
         transcript = transcript[0]
+        st.write(transcript)
     except Exception as e:
-        transcript = 'test transcript'
         st.write('Error loading transcript')
+        st.write(transcript)
 
     # Generate claims
     claims = generate_claims(transcript)
