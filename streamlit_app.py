@@ -53,9 +53,8 @@ if st.button('load transcipt'):
     transcipt = loader.load()
     transcipt = transcipt[0]
     st.write(transcipt.page_content)
-
-if st.button("ent", key="input_ent"):
-    if input_text:
+    
+    if transcipt:
         # Generate claims
         claims = generate_claims(input_text)
         if claims:
