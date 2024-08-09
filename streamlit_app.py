@@ -152,9 +152,6 @@ if transcript:
     # for i in range(3):
     #     offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
     #     st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=500)
-else:
-    st.warning("Please enter a video link.")
-
 # Share button
 if st.button("Share"):
     st.success("Shared with the community! [Link to the community](https://sites.google.com/view/hindi-democracy-defenders/home?authuser=3)", icon="🔥")
