@@ -91,6 +91,7 @@ st.title("Top polarizing content for candidate")
 query = st.text_input("Refine:", value='filter polarizing content')
 language = st.selectbox("Select language:", [('Hindi', 'hi'), ('Mandarin', 'zh-CN'), ('Cantonese', 'zh-TW')], index=0)
 
+
 results = fetch_high_polarity_video()
 if results:
     cols = st.columns(3)  # Create 3 columns
