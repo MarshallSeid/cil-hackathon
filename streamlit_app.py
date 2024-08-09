@@ -1,6 +1,6 @@
 import streamlit as st
 from openai import OpenAI
-
+from constants import claim_prompt, counter_narrative_prompt
 # langchain 
 from langchain_community.document_loaders import YoutubeLoader
 
@@ -25,7 +25,7 @@ def generate_claims(input_text):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Analyze the following text and identify the main claims:"},
+                {"role": "system", "content": claim_prompt},
                 {"role": "user", "content": input_text}
             ],
             stream=False,
@@ -37,7 +37,23 @@ def generate_claims(input_text):
 
 def generate_offensive_messaging(input_text):
     # Placeholder function - replace with actual implementation
-    return f"Potentially offensive message based on: {input_text}"
+    if not client:
+            st.error("Please enter your OpenAI API key to generate claims.")
+            return None
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": counter_narrative_prompt},
+                {"role": "user", "content": input_text}
+            ],
+            stream=False,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+        return None
 
 st.title("AAPI Countering Disinformation")
 
