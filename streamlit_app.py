@@ -1,5 +1,5 @@
 import streamlit as st
-# from openai import OpenAI
+from openai import OpenAI
 
 # langchain 
 from langchain_community.document_loaders import YoutubeLoader
@@ -9,9 +9,12 @@ client = None
 
 def initialize_openai_client():
     global client
-    api_key = st.session_state.get('openai_api_key')
+    api_key = st.secrets["OPENAI_TOKEN"]
     if api_key:
         client = OpenAI(api_key=api_key)
+
+# API Key input
+initialize_openai_client()
 
 def generate_claims(input_text):
     if not client:
@@ -22,7 +25,7 @@ def generate_claims(input_text):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "cont`ent": "Analyze the following text and identify the main claims:"},
+                {"role": "system", "content": "Analyze the following text and identify the main claims:"},
                 {"role": "user", "content": input_text}
             ],
             stream=False,
@@ -38,40 +41,37 @@ def generate_offensive_messaging(input_text):
 
 st.title("AAPI Countering Disinformation")
 
-# API Key input
-api_key = st.text_input("OpenAI API Key", type="password")
-if api_key:
-    st.session_state['openai_api_key'] = api_key
-    initialize_openai_client()
-
 # Input field and button
 input_text = st.text_input("Input - ex: Youtube Link")
-transcipt = ''
+transcript = ''
 
-if st.button('load transcipt'): 
-    loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False)
-    transcipt = loader.load()
-    transcipt = transcipt[0]
-    st.write(transcipt.page_content)
-    
-    if transcipt:
-        # Generate claims
-        claims = generate_claims(input_text)
-        if claims:
-            st.text_area("Generated claims from the input", claims, height=100)
+if st.button('load transcript'): 
+    try: 
+        loader = YoutubeLoader.from_youtube_url(input_text, add_video_info=False)
+        transcript = loader.load()
+        transcript = transcript[0]
+        st.write(transcript.page_content)
+    except Exception as e:
+        transcript = 'test transcript'
 
-        # Yes/No input and button
-        yes_no = st.radio("Yes/No", ["Yes", "No"])
-        if st.button("ent", key="yes_no_ent"):
-            # Language Output
-            st.text_input("Language Output", "Sample output based on Yes/No")
+if transcript:
+    # Generate claims
+    claims = generate_claims(transcript)
+    if claims:
+        st.text_area("Generated claims from the input", claims, height=100)
 
-            # Generate offensive messaging sections
-            for i in range(3):
-                offensive_msg = generate_offensive_messaging(input_text)
-                st.text_area(f"Generated offensive messaging from the input ({i+1})", offensive_msg, height=50)
-    else:
-        st.warning("Please enter some input text.")
+    # Yes/No input and button
+    yes_no = st.radio("Yes/No", ["Yes", "No"])
+    if st.button("ent", key="yes_no_ent"):
+        # Language Output
+        st.text_input("Language Output", "Sample output based on Yes/No")
+
+        # Generate offensive messaging sections
+        for i in range(3):
+            offensive_msg = generate_offensive_messaging(input_text)
+            st.text_area(f"Generated offensive messaging from the input ({i+1})", offensive_msg, height=50)
+else:
+    st.warning("Please enter a video link.")
 
 # Share button
 if st.button("Share"):
