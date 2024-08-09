@@ -3,6 +3,7 @@ from googleapiclient.errors import HttpError
 import os
 import datetime
 import streamlit as st
+import pickle
 
 API_KEY = st.secrets.get('YOUTUBE_API_KEY')
 
@@ -57,7 +58,17 @@ def get_video_stats(video_id):
         return None
 
 # @st.cache_data
-def fetch_high_polarity_video(query_strings = ['कमला हैरिस को राष्ट्रपति नहीं बनना चाहिए' ], language='hi'):
+def fetch_high_polarity_video(query_strings = ['कमला हैरिस को राष्ट्रपति नहीं बनना चाहिए' ], language='hi', use_pickle=True):
+
+    # Check if pickled results exist and are less than 24 hours old
+    if use_pickle is True:
+        pickle_file = 'video_results.pickle'
+        if os.path.exists(pickle_file):
+            file_mod_time = datetime.datetime.fromtimestamp(os.path.getmtime(pickle_file))
+            if datetime.datetime.now() - file_mod_time < datetime.timedelta(hours=24):
+                with open(pickle_file, 'rb') as f:
+                    return pickle.load(f)
+
     results = {}
     for query in query_strings:
         print(f"Searching for top trending videos about '{query}' in Hindi...")
@@ -77,4 +88,8 @@ def fetch_high_polarity_video(query_strings = ['कमला हैरिस क
             
             print(f"Video URL: https://www.youtube.com/watch?v={video['id']}")
             results[query].append({"video": video, "stats": stats})
+
+    with open(pickle_file, 'wb') as f:
+        pickle.dump(results, f)
+
     return results
