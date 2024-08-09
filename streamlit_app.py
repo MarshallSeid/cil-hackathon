@@ -74,7 +74,6 @@ if st.button('load transcript'):
 if transcript:
     # Generate claims
     claims = generate_claims(transcript)
-    claims = ''
     if claims:
         st.text_area("Generated claims from the input", claims, height=100)
 
