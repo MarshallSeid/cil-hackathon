@@ -16,6 +16,26 @@ def initialize_openai_client():
 # API Key input
 initialize_openai_client()
 
+
+st.markdown("""
+    <style>
+    .blue-button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
 def generate_claims(input_text):
     input_text = input_text.page_content
     if not client:
@@ -85,24 +105,6 @@ if transcript:
             ["English", "Hindi", "Spanish", "Mandarin", "French", "Arabic"]
         )
 
-        st.markdown("""
-            <style>
-            .blue-button {
-                background-color: #007BFF;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 4px;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-
         # HTML for the button
         if st.markdown('<button class="blue-button">Generate counter narrative Messaging</button>', unsafe_allow_html=True):
             offensive_msg = generate_offensive_messaging(transcript, language)
@@ -111,7 +113,7 @@ if transcript:
     # Generate offensive messaging sections
     for i in range(3):
         offensive_msg = generate_offensive_messaging(transcript, "English")  # Default to English for these
-        st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=200)
+        st.text_area(f"Generated positive/counter narrative messaging from the input - {i+1}", offensive_msg, height=500)
 else:
     st.warning("Please enter a video link.")
 
