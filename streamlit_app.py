@@ -7,6 +7,9 @@ import pandas as pd
 from datetime import datetime
 
 
+if 'results' not in st.session_state:
+    st.session_state.results = []
+
 # Sample data for CSV
 data = {
     'Column1': [1, 2, 3],
@@ -87,18 +90,19 @@ def generate_offensive_messaging(input_tex, language):
         st.error(f"An error occurred: {str(e)}")
         return None
 
-st.title("AAPI Countering Disinformation")
+st.title("AAPI Countering Disinformation 🌸")
 
-query = st.text_input("Refine:", value='...')
+query = st.text_input("Refine:", placeholder='Specify search terms')
 language = st.selectbox("Select language:", [('Select a lanaguage'), ('Hindi', 'hi'), ('Mandarin', 'zh-CN'), ('Cantonese', 'zh-TW')], index=0)
-if st.button('Search'): 
+if st.button('Search') or st.session_state.results: 
     st.subheader("Top polarizing content for candidate")
 
-    results = fetch_high_polarity_video(query, language[1])
-    if results:
+    results = fetch_high_polarity_video([query], language[1])
+    st.session_state.results = results
+    if st.session_state.results:
         cols = st.columns(3)  # Create 3 columns
         index = 0
-        for query, video_stats in results.items():
+        for query, video_stats in st.session_state.results.items():
             for video_stat in video_stats:
                 video = video_stat.get('video')
                 stats = video_stat.get('stats')
@@ -121,7 +125,7 @@ if st.button('Search'):
 else:
     st.warning("No videos found matching the criteria.")
 
-# Input field and button
+    # Input field and button
 input_text = st.text_input("Input - ex: Youtube Link")
 transcript = ''
 

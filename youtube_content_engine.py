@@ -10,7 +10,7 @@ API_KEY = st.secrets.get('YOUTUBE_API_KEY')
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 # Day Kamala Harris became the Democratic nominee for Vice President
-# @st.cache_data
+@st.cache_data
 def search_videos(query, language, max_results=6, published_after=datetime.datetime(2024, 7, 21)):
     try:
         print(query)
@@ -41,7 +41,7 @@ def search_videos(query, language, max_results=6, published_after=datetime.datet
         print(f'An error occurred: {e}')
         return []
 
-# @st.cache_data
+@st.cache_data
 def get_video_stats(video_id):
     try:
         stats = youtube.videos().list(
@@ -57,7 +57,7 @@ def get_video_stats(video_id):
         print(f'An error occurred: {e}')
         return None
 
-# @st.cache_data
+@st.cache_data
 def fetch_high_polarity_video(query_strings = ['कमला हैरिस को राष्ट्रपति नहीं बनना चाहिए' ], language='hi', use_pickle=True):
 
     # Check if pickled results exist and are less than 24 hours old
