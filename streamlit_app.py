@@ -75,5 +75,4 @@ else:
 
 # Share button
 if st.button("Share"):
-    st.success("Sharing functionality would be implemented here")
-
+    st.success("Shared with the community! [Link to the community](https://sites.google.com/view/hindi-democracy-defenders/home?authuser=3)", icon="🔥")
