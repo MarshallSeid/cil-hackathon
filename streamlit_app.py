@@ -3,6 +3,14 @@ from openai import OpenAI
 from constants import claim_prompt, counter_narrative_prompt
 # langchain 
 from langchain_community.document_loaders import YoutubeLoader
+import pandas as pd
+
+# Sample data for CSV
+data = {
+    'Column1': [1, 2, 3],
+    'Column2': ['A', 'B', 'C']
+}
+df = pd.DataFrame(data)
 
 # Initialize OpenAI client
 client = None
@@ -120,3 +128,10 @@ else:
 # Share button
 if st.button("Share"):
     st.success("Shared with the community! [Link to the community](https://sites.google.com/view/hindi-democracy-defenders/home?authuser=3)", icon="🔥")
+
+# Export button
+st.download_button(
+    label="Export CSV",
+    data=df.to_csv(index=False).encode('utf-8'),
+    file_name='PotentialDisinformationBreakdown.csv',
+    mime='text/csv')

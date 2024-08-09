@@ -3,3 +3,4 @@ openai
 langchain_community
 youtube-transcript-api
 google-api-python-client-stubs
+pandas
