@@ -122,8 +122,6 @@ if st.button('Search') or st.session_state.results:
                     st.markdown(f"https://www.youtube.com/watch?v={video['id']}")
                     st.write("---")
                     index += 1
-else:
-    st.warning("No videos found matching the criteria.")
 
     # Input field and button
 input_text = st.text_input("Input - ex: Youtube Link")
